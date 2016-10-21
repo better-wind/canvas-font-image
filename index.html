@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="baidu-site-verification" content="vwQwlikFnE" />
+    <meta name="Keywords" content="">
+    <meta name="Description" content="">
+    <meta name="robots" content="all"/>
+    <meta name="author" content="想去，xiangqu.com"/>
+    <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+    <meta content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <meta content="yes" name="apple-mobile-web-app-capable">
+    <meta content="black" name="apple-mobile-web-app-status-bar-style">
+    <meta content="telephone=no" name="format-detection">
+</head>
+<body>
+<section class="canvas-view">
+    <canvas id="MyCanvas" style="display: none"></canvas>
+    <img style="width:100%;" id="Img" src="" alt=""/>
+</section>
+
+<script>
+    let MedicalRecordList = {
+        Pisces :[
+            {
+                details:['$+@60@**+$$+@45@想发个朋友圈,+$','结果..$+@45@俩小时+$过去了...','还在$+@70@选照片+$'],
+            }
+        ],
+    }
+    {
+        let Canvas = document.getElementById('MyCanvas'),
+                ctx = Canvas.getContext('2d');
+        let details = MedicalRecordList.Pisces[0].details,
+                height = 0,
+                _name = '潘多拉',
+                _dpr = 1,
+                _fontFamily='arial',
+                _fontWeight='',
+                _psd = 750 /_dpr,
+                _scale = window.document.documentElement.clientWidth/_psd;
+        Canvas.height = 50 * details.length * _dpr;
+        Canvas.width = window.document.documentElement.clientWidth* _dpr;
+        ctx.fillStyle = 'rgb(255,234,0)';
+        ctx.fillRect(0,0,Canvas.width,Canvas.height);
+        ctx.fillStyle = '#000';
+        ctx.textBaseline = 'baseline';
+        details.forEach((detail) => {
+            let _msg = detail.replace(/\*\*/g,_name),
+            _msgList = _msg.replace(/\$\+/g,'$+$').split(/\$\+|\+\$/),
+                _fontSize = 18*_dpr,
+                _fontHeight = 28*_dpr,
+                _fontHeightMore = 46*_dpr,
+                _bold = 0,
+                _msgObj = {
+                    textLength:0,
+                    textHeight:_fontHeight,
+                    items:[]
+                },
+                _offsetLeft = 0,
+                _offsetTop = _fontHeight;
+
+        _msgList.forEach((arr) => {
+            let _obj = {};
+        if(arr){
+            if(arr.indexOf('$') > -1){
+                _offsetTop = _fontHeightMore;
+            }
+            ctx.font =_fontWeight +' '+(arr.indexOf('$') > -1 ? arr.split('@')[1]*_dpr : _fontSize)*_scale +'px '+_fontFamily;
+            arr = arr.replace(/\$|@.+@/g,'');
+            _obj = {
+                text:arr,
+                offsetLeft:_offsetLeft,
+                offsetTop:_offsetTop,
+                textLength:ctx.measureText(arr).width,
+                style:ctx.font,
+                bold:_bold
+            }
+            _offsetLeft += _obj.textLength;
+            _msgObj.items.push(_obj);
+        }
+    })
+    _msgObj.textLength = _offsetLeft;
+    _msgObj.textHeight = _offsetTop;
+    height += _offsetTop;
+    _msgObj.items.forEach((arr) => {
+        let _offsetLeft = (Canvas.width - _msgObj.textLength) / 2;
+        ctx.font =arr.style;
+        ctx.fillText(arr.text,_offsetLeft+arr.offsetLeft,height);
+        })
+    })
+    let a = Canvas.toDataURL("image/png"),
+        b = Canvas.toDataURL("image/png").replace("data:image/png;base64,",""),
+        Img = document.querySelector('#Img');
+    Img.setAttribute('src',a);
+
+    }
+</script>
+</body>
+</html>
